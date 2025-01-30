@@ -1,0 +1,26 @@
+$primary-color: #f4978e;
+
+.info__header {
+  font-size: 3rem;
+
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
+
+  @media (max-width: 426px) {
+    font-size: 2rem;
+  }
+
+  .info__span {
+    color: $primary-color;
+  }
+}
+
+.info__text {
+  line-height: 1.5;
+  text-align: justify;
+
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+  }
+}
