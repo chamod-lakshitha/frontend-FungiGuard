@@ -6,8 +6,10 @@ import RenderInput from './helpers/RenderInput';
 import { CiWarning } from 'react-icons/ci';
 import axios from 'axios';
 import Result from './Result';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
-function Prediction() {
+function Prediction({ onPredictionSubmit }) {
   const optionData = optionsData;
 
   const clearRef = useRef(null);
@@ -39,6 +41,20 @@ function Prediction() {
   // eslint-disable-next-line no-unused-vars
   const [predictionData, setPredictionData] = useState(null);
   const [featureValues, setFeatureValues] = useState(null);
+  const [triggerFetch, setTriggerFetch] = useState(false);
+
+  useEffect(() => {
+    AOS.init({ duration: 850 });
+  }, []);
+
+  useEffect(() => {
+    const tooltipTriggerList = document.querySelectorAll(
+      '[data-bs-toggle="tooltip"]'
+    );
+    tooltipTriggerList.forEach(
+      (tooltip) => new window.bootstrap.Tooltip(tooltip)
+    );
+  }, []);
 
   const predictEdibility = async () => {
     console.log('inside axios');
@@ -59,6 +75,7 @@ function Prediction() {
       ringType: Number(formData.ringType),
       habitat: 0,
       season: 0,
+      userId: localStorage.getItem('userUID'),
     };
 
     try {
@@ -66,11 +83,10 @@ function Prediction() {
         'http://127.0.0.1:5000/api/v1/predict',
         mushroomFeatures
       );
-      // predictRef.current.disabled = true;
-      explanationRef.current.disabled = false;
       setPredicted(true);
       setResponse(res.data);
       setPredictionData(res.data.inputs);
+      setTriggerFetch(true);
       console.log('Response:', res.data);
     } catch (error) {
       setPredicted(true);
@@ -79,15 +95,32 @@ function Prediction() {
     }
   };
 
-  const fetchExplanation = async (e) => {
+  const fetchExplanationLIME = async (e) => {
+    setImageData('');
     e.preventDefault();
     try {
       const response = await axios.post(
-        'http://127.0.0.1:5000/api/v1/explain',
+        'http://127.0.0.1:5000/api/v1/explain_LIME',
         predictionData
       );
       setImageData(response.data.image_data);
       setFeatureValues(response.data.feature_values);
+    } catch (error) {
+      console.error('Error fetching explanation:', error);
+    }
+  };
+
+  const fetchExplanationSHAP = async (e) => {
+    setImageData('');
+    e.preventDefault();
+    console.log('shap called');
+    try {
+      const response = await axios.post(
+        'http://127.0.0.1:5000/api/v1/explain_SHAP',
+        predictionData
+      );
+      setImageData(response.data.image_data);
+      // setFeatureValues(response.data.feature_values);
     } catch (error) {
       console.error('Error fetching explanation:', error);
     }
@@ -103,7 +136,6 @@ function Prediction() {
 
   const clearInputs = () => {
     predictRef.current.disabled = false;
-    explanationRef.current.disabled = true;
     setDisabled(false);
     setPredictionData(null);
     setImageData(null);
@@ -145,12 +177,19 @@ function Prediction() {
   };
 
   useEffect(() => {
-    explanationRef.current.disabled = true;
-  }, []);
+    if (triggerFetch) {
+      onPredictionSubmit();
+      setTriggerFetch(false);
+    }
+  }, [triggerFetch, onPredictionSubmit]);
 
   return (
     <>
-      <div className="prediction__outer pb-2">
+      <div
+        data-aos="fade-up"
+        className="prediction__outer pb-2 id"
+        id="prediction"
+      >
         <div className="container w-100 my-4 pt-1 prediction__inner">
           <h2 className="text-center fw-bold prediction__header">
             Predict&nbsp;
@@ -167,6 +206,7 @@ function Prediction() {
                   value={formData.capShape}
                   onChange={handleChange}
                   disabled={disabled}
+                  tooltip="The shape of the mushroom cap"
                 />
                 <RenderSelect
                   id="capSurface"
@@ -175,6 +215,7 @@ function Prediction() {
                   value={formData.capSurface}
                   onChange={handleChange}
                   disabled={disabled}
+                  tooltip="The surface texture of the mushroom cap"
                 />
               </div>
               <div className="row mb-3">
@@ -185,6 +226,7 @@ function Prediction() {
                   value={formData.capColor}
                   onChange={handleChange}
                   disabled={disabled}
+                  tooltip="The color of the mushroom cap"
                 />
                 <RenderSelect
                   id="gillAttachment"
@@ -193,6 +235,7 @@ function Prediction() {
                   value={formData.gillAttachment}
                   onChange={handleChange}
                   disabled={disabled}
+                  tooltip="How the mushroom gills are attached to the stem"
                 />
               </div>
               <div className="row mb-3">
@@ -203,6 +246,7 @@ function Prediction() {
                   value={formData.gillColor}
                   onChange={handleChange}
                   disabled={disabled}
+                  tooltip="The color of the gills underneath the mushroom cap"
                 />
                 <RenderSelect
                   id="stemColor"
@@ -211,6 +255,7 @@ function Prediction() {
                   value={formData.stemColor}
                   onChange={handleChange}
                   disabled={disabled}
+                  tooltip="The color of the mushroom stem"
                 />
               </div>
               <div className="row mb-3">
@@ -221,6 +266,7 @@ function Prediction() {
                   value={formData.ringType}
                   onChange={handleChange}
                   disabled={disabled}
+                  tooltip="The type of ring on the mushroom stem"
                 />
                 <RenderInput
                   id="capDiameter"
@@ -228,22 +274,27 @@ function Prediction() {
                   value={formData.capDiameter}
                   onChange={handleChange}
                   disabled={disabled}
+                  tooltip="The diameter of the mushroom cap in cm"
                 />
               </div>
               <div className="row mb-3">
                 <RenderInput
+                  type="number"
                   id="stemHeight"
                   label="Stem-Height"
                   value={formData.stemHeight}
                   onChange={handleChange}
                   disabled={disabled}
+                  tooltip="The height of the mushroom stem in cm"
                 />
                 <RenderInput
+                  type="number"
                   id="stemWidth"
                   label="Stem-Width"
                   value={formData.stemWidth}
                   onChange={handleChange}
                   disabled={disabled}
+                  tooltip="The width of the mushroom stem in cm"
                 />
               </div>
               {error && (
@@ -276,18 +327,6 @@ function Prediction() {
                 >
                   Predict Edibility
                 </button>
-                <button
-                  type="submit"
-                  ref={explanationRef}
-                  className="btn btn-outline-success mx-3"
-                  style={{
-                    fontSize: '1.1rem',
-                    fontWeight: 'bold',
-                  }}
-                  onClick={fetchExplanation}
-                >
-                  Generate Explanation Report
-                </button>
               </div>
             </form>
           </div>
@@ -299,6 +338,9 @@ function Prediction() {
         response={response}
         imageData={imageData}
         featureValues={featureValues}
+        explanationRef={explanationRef}
+        fetchExplanationLIME={fetchExplanationLIME}
+        fetchExplanationSHAP={fetchExplanationSHAP}
       />
     </>
   );

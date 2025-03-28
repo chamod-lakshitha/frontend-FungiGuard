@@ -1,14 +1,28 @@
-import { React } from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaFacebook, FaAngleDoubleRight } from 'react-icons/fa';
 import { IoHomeOutline, IoLogoYoutube } from 'react-icons/io5';
 import { FaSquareInstagram } from 'react-icons/fa6';
-import { GoPerson } from 'react-icons/go';
+import { RiLogoutCircleLine } from 'react-icons/ri';
 import { TbMushroom } from 'react-icons/tb';
 import { CgMenuRight } from 'react-icons/cg';
-import { CiPhone } from 'react-icons/ci';
+import { AiOutlineFileSearch } from 'react-icons/ai';
 import '../styles/header.style.scss';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 function Header() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    AOS.init({ duration: 850 });
+  }, []);
+
+  const reloadPage = (event) => {
+    window.location.reload();
+    return false;
+  };
+
   return (
     <div
       className="header__outer"
@@ -34,21 +48,35 @@ function Header() {
         </div>
         <ul className="navbar__list">
           <li className="navbar__list__item">
-            <IoHomeOutline />
-            &nbsp;Home
+            <a href="#" onClick={reloadPage}>
+              <IoHomeOutline />
+              &nbsp;Home
+            </a>
           </li>
           <li className="navbar__list__item">
-            <TbMushroom />
-            &nbsp;Predict Edibility
+            <a href="#prediction">
+              <TbMushroom />
+              &nbsp;Predict Edibility
+            </a>
           </li>
           <li className="navbar__list__item">
-            {' '}
-            <CiPhone />
-            &nbsp;Contact Us
+            <a href="">
+              <AiOutlineFileSearch />
+              &nbsp;Predict History
+            </a>
           </li>
-          <GoPerson
-            className="person__icon"
-            style={{ fontSize: '1.3rem', paddingBottom: '2px' }}
+          <RiLogoutCircleLine
+            className="log__out"
+            style={{
+              fontSize: '1.3rem',
+              paddingBottom: '2px',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              localStorage.clear();
+              console.log('logging out');
+              navigate('/');
+            }}
           />
           <CgMenuRight
             className="menu__item"
@@ -61,6 +89,7 @@ function Header() {
         </ul>
       </div>
       <div
+        data-aos="fade-up"
         className="hero__outer"
         style={{
           margin: '0px 5.3em 0 5.3em',
@@ -88,7 +117,7 @@ function Header() {
           </button>
         </div>
         <div className="hero__content__right">
-          <div className="left__pic">
+          <div data-aos="flip-up" className="left__pic">
             <div>
               <span>
                 <FaFacebook />
@@ -101,7 +130,7 @@ function Header() {
               </span>
             </div>
           </div>
-          <div className="right__pic"></div>
+          <div data-aos="flip-down" className="right__pic"></div>
         </div>
       </div>
       <div className="lower__navbar__outer">

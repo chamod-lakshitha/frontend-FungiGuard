@@ -21,6 +21,26 @@ $primary-color: #f4978e;
 .explanation__outer {
   .explanation__inner {
     .results__outer {
+      @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+
+        .image__container {
+          width: 80% !important;
+          margin-bottom: 20px !important;
+
+          .explanation__header {
+            text-align: center !important;
+            background-color: #f4978e;
+          }
+        }
+
+        .feature__value__table {
+          width: 85% !important;
+        }
+      }
+
       display: flex;
       justify-content: space-between;
 

@@ -2,11 +2,11 @@ export const optionsData = {
   capShape: [
     { value: '0', label: 'Bell' },
     { value: '1', label: 'Conical' },
-    { value: '2', label: 'Convex' },
-    { value: '3', label: 'Flat' },
-    { value: '4', label: 'Sunken' },
-    { value: '5', label: 'Spherical' },
-    { value: '6', label: 'Others' },
+    { value: '6', label: 'Convex' },
+    { value: '2', label: 'Flat' },
+    { value: '5', label: 'Sunken' },
+    { value: '4', label: 'Spherical' },
+    { value: '3', label: 'Others' },
   ],
   capSurface: [
     { value: '0', label: 'Fuzzy' },

@@ -1,0 +1,21 @@
+$primary-color: #f4978e;
+
+.history__outer {
+  margin-bottom: 1rem;
+}
+
+.history__header {
+  font-size: 3rem;
+
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
+
+  @media (max-width: 426px) {
+    font-size: 2rem;
+  }
+
+  .history__span {
+    color: $primary-color;
+  }
+}

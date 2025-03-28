@@ -3,7 +3,7 @@ import '../styles/info.styles.scss';
 
 function Info() {
   return (
-    <div className="container w-100 mt-4 pt-1 info__outer">
+    <div className="container w-100 mt-4 pt-1 info__outer" id="info">
       <h2 className="text-center fw-bold info__header">
         Why&nbsp;
         <span className="info__span">Mushroom Edibility Prediction </span>

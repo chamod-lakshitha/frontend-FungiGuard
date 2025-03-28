@@ -6,23 +6,25 @@ function RenderSelect(props) {
       <label htmlFor={props.id} className="form-label">
         {props.label}
       </label>
-      <select
-        className="form-select"
-        id={props.id}
-        value={props.value}
-        onChange={props.onChange}
-        required
-        disabled={props.disabled}
-      >
-        <option value="" disabled>
-          Choose an option...
-        </option>
-        {props.optionData.map(({ value, label }) => (
-          <option key={value} value={value}>
-            {label}
+      <div data-bs-toggle="tooltip" title={props.tooltip}>
+        <select
+          className="form-select"
+          id={props.id}
+          value={props.value}
+          onChange={props.onChange}
+          required
+          disabled={props.disabled}
+        >
+          <option value="" disabled>
+            Choose an option...
           </option>
-        ))}
-      </select>
+          {props.optionData.map(({ value, label }) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 }

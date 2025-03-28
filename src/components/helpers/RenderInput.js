@@ -6,15 +6,17 @@ function RenderInput(props) {
       <label htmlFor={props.id} className="form-label">
         {props.label}
       </label>
-      <input
-        type="number"
-        className="form-control"
-        id={props.id}
-        value={props.value}
-        onChange={props.onChange}
-        required
-        disabled={props.disabled}
-      />
+      <div data-bs-toggle="tooltip" title={props.tooltip}>
+        <input
+          type={props.type}
+          className="form-control"
+          id={props.id}
+          value={props.value}
+          onChange={props.onChange}
+          required
+          disabled={props.disabled}
+        />
+      </div>
     </div>
   );
 }

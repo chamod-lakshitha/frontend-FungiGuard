@@ -5,19 +5,32 @@ import '../styles/result.style.scss';
 
 function Result(props) {
   const [isLoading, setIsLoading] = useState(false);
+  const [explanationType, setExplanationType] = useState(null);
 
   useEffect(() => {
     if (props.showLoader) {
       setIsLoading(true);
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 10000);
+      }, 5000);
 
       return () => clearTimeout(timer);
     } else {
       setIsLoading(false);
     }
   }, [props.showLoader]);
+
+  const handleLIMEExplanation = (event) => {
+    event.preventDefault();
+    setExplanationType('LIME');
+    props.fetchExplanationLIME(event);
+  };
+
+  const handleSHAPExplanation = (event) => {
+    event.preventDefault();
+    setExplanationType('SHAP');
+    props.fetchExplanationSHAP(event);
+  };
 
   return (
     <div className="mt-3 mb-4">
@@ -26,7 +39,7 @@ function Result(props) {
           Prediction&nbsp;
           <span className="result__span">Results</span>
         </h2>
-        <p className="text-center" style={{ height: '30px' }}>
+        <div className="text-center" style={{ height: 'max-content' }}>
           {console.log(props)}
           {props.showLoader === false ? (
             'Undergo a prediction to get the edibility results.'
@@ -36,18 +49,58 @@ function Result(props) {
               cssOverride={{ display: 'inline-block' }}
             />
           ) : props.response.prediction === 'True' ? (
-            `Mushroom type is ${props.response.result}.`
+            <>
+              <p>{`Mushroom type is ${props.response.result}.`}</p>
+              <button
+                type="submit"
+                ref={props.explanationRef}
+                className="btn btn-outline-success mx-3"
+                style={{
+                  fontSize: '1.1rem',
+                  fontWeight: 'bold',
+                  marginTop: '-5px',
+                  marginBottom: '15px',
+                }}
+                onClick={(event) => handleLIMEExplanation(event)}
+              >
+                Generate LIME Report
+              </button>
+              <button
+                type="submit"
+                ref={props.explanationRef}
+                className="btn btn-outline-success mx-3"
+                style={{
+                  fontSize: '1.1rem',
+                  fontWeight: 'bold',
+                  marginTop: '-5px',
+                  marginBottom: '15px',
+                }}
+                onClick={(event) => handleSHAPExplanation(event)}
+              >
+                Generate SHAP Report
+              </button>
+            </>
           ) : (
             'Error some thing happens. Please try again later.' + props.response
           )}
-        </p>
+        </div>
       </div>
       <div className="container explanation__outer">
         <div className="explanation__inner">
           {props.imageData && (
             <div className="results__outer">
-              <div className="image__container">
-                <h3 className="mb-3">Generated Explanation Image</h3>
+              <div
+                className="image__container"
+                style={{
+                  width: explanationType === 'SHAP' ? '75%' : '57%',
+                  textAlign: explanationType === 'SHAP' ? 'center' : '',
+                  margin: 'auto',
+                }}
+              >
+                <h3 className="mb-3 explanation__header">
+                  Generated Explanation&nbsp;
+                  {explanationType === 'LIME' ? 'LIME' : 'SHAP'} Image
+                </h3>
                 <img
                   src={`data:image/png;base64,${props.imageData}`}
                   alt="Explanation Visualization"
@@ -58,25 +111,27 @@ function Result(props) {
                   }}
                 />
               </div>
-              <table
-                border="1"
-                class="table table-striped feature__value__table"
-              >
-                <thead>
-                  <tr>
-                    <th>Feature</th>
-                    <th>Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {props.featureValues.map(([feature, value], index) => (
-                    <tr key={index}>
-                      <td>{feature}</td>
-                      <td>{value.toFixed(3)}</td>
+              {explanationType === 'LIME' && props.featureValues && (
+                <table
+                  border="1"
+                  className="table table-striped feature__value__table"
+                >
+                  <thead>
+                    <tr>
+                      <th>Feature</th>
+                      <th>Value</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {props.featureValues.map(([feature, value], index) => (
+                      <tr key={index}>
+                        <td>{feature}</td>
+                        <td>{value.toFixed(3)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           )}
         </div>
