@@ -6,37 +6,42 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 function History({ triggerFetch }) {
+  // State to store fetched history data
   const [historyData, setHistoryData] = useState([]);
 
+  // Initialize AOS (Animate On Scroll) library for animations
   useEffect(() => {
     AOS.init({ duration: 850 });
   }, []);
 
+  // Fetch history data when 'triggerFetch' changes
   useEffect(() => {
-    let isMounted = true;
+    let isMounted = true; // Track if component is still mounted before updating state
 
     if (triggerFetch || isMounted) {
       const fetchHistory = async () => {
         try {
+          // Fetch past predictions from backend API
           const response = await axios.post(
             'http://localhost:5000/api/v1/past_predictions',
             {
-              userId: localStorage.getItem('userUID'),
+              userId: localStorage.getItem('userUID'), // Get user ID from local storage
             }
           );
-          setHistoryData(response.data.past_predictions);
-          console.log(response.data.past_predictions);
+          setHistoryData(response.data.past_predictions); // Update state with fetched data
+          console.log(response.data.past_predictions); // Log the fetched data for debugging
         } catch (error) {
-          console.error('Error fetching past predictions:', error);
+          console.error('Error fetching past predictions:', error); // Handle error during fetch
         }
       };
 
-      fetchHistory();
+      fetchHistory(); // Call the function to fetch data
     }
+    // Cleanup function to prevent memory leaks if component unmounts
     return () => {
       isMounted = false;
     };
-  }, [triggerFetch]);
+  }, [triggerFetch]); // Dependency array to re-fetch history when 'triggerFetch' changes
 
   return (
     <div data-aos="fade-up" className="history__outer pb-2 id" id="history">
@@ -48,12 +53,14 @@ function History({ triggerFetch }) {
         {
           <div>
             {historyData.length === 0 ? (
+              // Display a message if no past history is available
               <p className="text-center">No past history available</p>
             ) : (
               <div
                 className="table-responsive"
                 style={{ maxHeight: '300px', overflowY: 'auto' }}
               >
+                {/* Table displaying the prediction history */}
                 <table className="table table-striped">
                   <thead>
                     <tr>
@@ -73,6 +80,7 @@ function History({ triggerFetch }) {
                     </tr>
                   </thead>
                   <tbody>
+                    {/* Loop through each prediction and display it */}
                     {historyData.map((prediction, index) => (
                       <tr key={index}>
                         <td>{prediction.predictionDate}</td>

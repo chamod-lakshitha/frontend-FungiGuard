@@ -12,12 +12,14 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 function Header() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // For navigation purposes
 
+  // Initialize AOS animations when component is mounted
   useEffect(() => {
     AOS.init({ duration: 850 });
   }, []);
 
+  // Reload the page when called
   const reloadPage = (event) => {
     window.location.reload();
     return false;
@@ -31,6 +33,7 @@ function Header() {
         width: '100vw',
       }}
     >
+      {/* Navbar container */}
       <div
         className="navbar__outer"
         style={{
@@ -38,6 +41,7 @@ function Header() {
           padding: '22.5px 12px 0 12px',
         }}
       >
+        {/* Logo and site title */}
         <div className="site__logo">
           <img
             src={require('../assets/FUNGIGUARD.png')}
@@ -46,6 +50,7 @@ function Header() {
           />
           <span className="navbar__title">Fungi Guard</span>
         </div>
+        {/* Navigation links */}
         <ul className="navbar__list">
           <li className="navbar__list__item">
             <a href="#" onClick={reloadPage}>
@@ -78,6 +83,7 @@ function Header() {
               navigate('/');
             }}
           />
+          {/* Menu icon */}
           <CgMenuRight
             className="menu__item"
             style={{
@@ -88,6 +94,7 @@ function Header() {
           />
         </ul>
       </div>
+      {/* Hero section with title and description */}
       <div
         data-aos="fade-up"
         className="hero__outer"
@@ -116,6 +123,7 @@ function Header() {
             </span>
           </button>
         </div>
+        {/* Right side with social media icons */}
         <div className="hero__content__right">
           <div data-aos="flip-up" className="left__pic">
             <div>
@@ -133,6 +141,7 @@ function Header() {
           <div data-aos="flip-down" className="right__pic"></div>
         </div>
       </div>
+      {/* Lower navbar with subscription form and stats */}
       <div className="lower__navbar__outer">
         <div
           className="email__outer"
@@ -156,6 +165,7 @@ function Header() {
             </button>
           </div>
         </div>
+        {/* Statistics section */}
         <div className="stat__outer">
           <div
             className="stat__container"

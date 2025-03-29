@@ -7,6 +7,7 @@ function Result(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [explanationType, setExplanationType] = useState(null);
 
+  // Handle loader visibility when prediction starts
   useEffect(() => {
     if (props.showLoader) {
       setIsLoading(true);
@@ -20,12 +21,14 @@ function Result(props) {
     }
   }, [props.showLoader]);
 
+  // Handle LIME explanation request
   const handleLIMEExplanation = (event) => {
     event.preventDefault();
     setExplanationType('LIME');
     props.fetchExplanationLIME(event);
   };
 
+  // Handle SHAP explanation request
   const handleSHAPExplanation = (event) => {
     event.preventDefault();
     setExplanationType('SHAP');
@@ -111,6 +114,7 @@ function Result(props) {
                   }}
                 />
               </div>
+              {/* Render feature importance table for LIME explanations */}
               {explanationType === 'LIME' && props.featureValues && (
                 <table
                   border="1"

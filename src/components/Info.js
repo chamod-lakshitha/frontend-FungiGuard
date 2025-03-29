@@ -4,11 +4,13 @@ import '../styles/info.styles.scss';
 function Info() {
   return (
     <div className="container w-100 mt-4 pt-1 info__outer" id="info">
+      {/* Header: Why Mushroom Edibility Prediction Matters */}
       <h2 className="text-center fw-bold info__header">
         Why&nbsp;
         <span className="info__span">Mushroom Edibility Prediction </span>
         Matters
       </h2>
+      {/* Paragraph explaining the importance of mushroom edibility prediction */}
       <p className="mt-4 pt-1 info__text">
         Mushroom edibility prediction ensures safety and supports sustainable
         practices. Rich in nutrients and vital for ecosystems, mushrooms can be

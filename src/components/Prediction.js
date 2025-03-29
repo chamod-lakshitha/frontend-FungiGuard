@@ -44,10 +44,11 @@ function Prediction({ onPredictionSubmit }) {
   const [triggerFetch, setTriggerFetch] = useState(false);
 
   useEffect(() => {
-    AOS.init({ duration: 850 });
+    AOS.init({ duration: 850 }); // Initialize AOS animations
   }, []);
 
   useEffect(() => {
+    // Initialize Bootstrap tooltips
     const tooltipTriggerList = document.querySelectorAll(
       '[data-bs-toggle="tooltip"]'
     );
@@ -56,6 +57,7 @@ function Prediction({ onPredictionSubmit }) {
     );
   }, []);
 
+  // Predict edibility according to the input data
   const predictEdibility = async () => {
     console.log('inside axios');
     setDisabled(true);
@@ -83,18 +85,19 @@ function Prediction({ onPredictionSubmit }) {
         'http://127.0.0.1:5000/api/v1/predict',
         mushroomFeatures
       );
-      setPredicted(true);
-      setResponse(res.data);
-      setPredictionData(res.data.inputs);
-      setTriggerFetch(true);
+      setPredicted(true); // Set predicted to true
+      setResponse(res.data); // Set the response
+      setPredictionData(res.data.inputs); // Set the prediction data
+      setTriggerFetch(true); // Trigger the history fetch
       console.log('Response:', res.data);
     } catch (error) {
-      setPredicted(true);
-      setResponse({ prediction: 'False' });
-      console.error('Error during POST request:', error);
+      setPredicted(true); // Set predicted to true
+      setResponse({ prediction: 'False' }); // Set the response
+      console.error('Error during POST request:', error); // Log the error
     }
   };
 
+  // Fetch explanation LIME
   const fetchExplanationLIME = async (e) => {
     setImageData('');
     e.preventDefault();
@@ -103,13 +106,14 @@ function Prediction({ onPredictionSubmit }) {
         'http://127.0.0.1:5000/api/v1/explain_LIME',
         predictionData
       );
-      setImageData(response.data.image_data);
-      setFeatureValues(response.data.feature_values);
+      setImageData(response.data.image_data); // Set the image data
+      setFeatureValues(response.data.feature_values); // Set the feature values
     } catch (error) {
-      console.error('Error fetching explanation:', error);
+      console.error('Error fetching explanation:', error); // Log the error
     }
   };
 
+  // Fetch explanation SHAP
   const fetchExplanationSHAP = async (e) => {
     setImageData('');
     e.preventDefault();
@@ -119,21 +123,23 @@ function Prediction({ onPredictionSubmit }) {
         'http://127.0.0.1:5000/api/v1/explain_SHAP',
         predictionData
       );
-      setImageData(response.data.image_data);
-      // setFeatureValues(response.data.feature_values);
+      setImageData(response.data.image_data); // Set the image data
     } catch (error) {
-      console.error('Error fetching explanation:', error);
+      console.error('Error fetching explanation:', error); // Log the error
     }
   };
 
+  // Handle input changes
   const handleChange = (e) => {
     const { id, value } = e.target;
+    // Set the corresponding field in formData
     setFormData({
       ...formData,
       [id]: value,
     });
   };
 
+  // Clear inputs
   const clearInputs = () => {
     predictRef.current.disabled = false;
     setDisabled(false);
@@ -155,6 +161,7 @@ function Prediction({ onPredictionSubmit }) {
     setError('');
   };
 
+  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
     setPredicted(false);

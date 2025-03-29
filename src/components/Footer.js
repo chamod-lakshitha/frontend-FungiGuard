@@ -5,10 +5,13 @@ import '../styles/footer.styles.scss';
 const Footer = () => {
   return (
     <footer className="footer_outer">
+      {/* Main footer container */}
       <div className="footer__inner">
+        {/* Site Links Section */}
         <div className="footer__section__outer links__outer">
           <h3 className="footer__title links__title">Site</h3>
           <ul className="links__list">
+            {/* List of navigation links in the footer */}
             <li>Home</li>
             <li>View Info</li>
             <li>Gallery</li>
@@ -16,6 +19,7 @@ const Footer = () => {
             <li>Predictions History</li>
           </ul>
         </div>
+        {/* Google Map Section */}
         <div className="footer__section__outer map__outer">
           <h3 className="footer__title map__title">Visit us</h3>
           <iframe
@@ -28,11 +32,13 @@ const Footer = () => {
             referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
+        {/* Social Media Section */}
         <div className="footer__section__outer social__media">
           <h3 className="footer__title social__title">Follow and Like us on</h3>
           <CiInstagram className="social__media__icon" />
           <CiTwitter className="social__media__icon" />
         </div>
+        {/* Contact Us Section */}
         <div className="footer__section__outer contact__us">
           <h3 className="footer__title contact__title">Contact us</h3>
           <p>Email : test@gmail.com</p>
@@ -40,6 +46,7 @@ const Footer = () => {
           <p>Address : 20, TOWN AVENUE, Colombo4</p>
         </div>
       </div>
+      {/* Footer bottom section with company name and copyright */}
       <section
         className="footer d-flex justify-content-between"
         style={{

@@ -18,6 +18,7 @@ function RenderSelect(props) {
           <option value="" disabled>
             Choose an option...
           </option>
+          {/* Mapping through the options array passed as props */}
           {props.optionData.map(({ value, label }) => (
             <option key={value} value={value}>
               {label}

@@ -3,6 +3,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 function Gallery() {
+  // useEffect hook to initialize AOS animations on component mount
   useEffect(() => {
     AOS.init();
   }, []);
@@ -13,7 +14,9 @@ function Gallery() {
       className="container mt-5"
       style={{ overflow: 'hidden' }}
     >
+      {/* Row container for the gallery cards */}
       <div className="row row-cols-1 row-cols-md-3 g-3">
+        {/* First card with a fade-right animation */}
         <div className="col" data-aos="fade-right" data-aos-duration="500">
           <div className="card">
             <img
@@ -30,6 +33,7 @@ function Gallery() {
             </div>
           </div>
         </div>
+        {/* Second card with a fade-up animation */}
         <div className="col" data-aos="fade-up" data-aos-duration="500">
           <div className="card">
             <img
@@ -46,6 +50,7 @@ function Gallery() {
             </div>
           </div>
         </div>
+        {/* Third card with a fade-left animation */}
         <div className="col" data-aos="fade-left" data-aos-duration="500">
           <div className="card">
             <img

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/signup.style.scss';
-import { auth, createUserWithEmailAndPassword } from "./firebaseConfig"
+import { auth, createUserWithEmailAndPassword } from './firebaseConfig';
 
 function SignUp() {
   const [formData, setFormData] = useState({
@@ -13,17 +13,21 @@ function SignUp() {
   const [error, setError] = useState('');
   const [completed, setCompleted] = useState(false);
 
+  // Handle input field changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Validate email format
   const validateEmail = (email) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate required fields
     if (
       !formData.name ||
       !formData.email ||
@@ -45,10 +49,15 @@ function SignUp() {
     }
 
     try {
-      await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-      setError("");
+      // Create user account in Firebase
+      await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      setError('');
       setCompleted(true);
-      console.log("User signed up successfully!");
+      console.log('User signed up successfully!');
     } catch (error) {
       setError(error.message);
     }
@@ -73,6 +82,7 @@ function SignUp() {
             </h2>
           </div>
           <form>
+            {/* Name input */}
             <div className="form-floating mb-3 signup__input__outer">
               <input
                 type="text"
@@ -84,6 +94,7 @@ function SignUp() {
               />
               <label>Name</label>
             </div>
+            {/* Email input */}
             <div className="form-floating mb-3 signup__input__outer">
               <input
                 type="email"
@@ -95,6 +106,7 @@ function SignUp() {
               />
               <label>Email address</label>
             </div>
+            {/* Password input */}
             <div className="form-floating mb-3 signup__input__outer">
               <input
                 type="password"
@@ -106,6 +118,7 @@ function SignUp() {
               />
               <label>Password</label>
             </div>
+            {/* Confirm password input */}
             <div className="form-floating mb-3 signup__input__outer">
               <input
                 type="password"
@@ -117,6 +130,7 @@ function SignUp() {
               />
               <label>Re-enter Password</label>
             </div>
+            {/* Error message display */}
             {error && (
               <p
                 className="m-0 error-message"
@@ -125,6 +139,7 @@ function SignUp() {
                 {error}
               </p>
             )}
+            {/* Submit button */}
             <button type="submit" onClick={handleSubmit}>
               Sign Up
             </button>
