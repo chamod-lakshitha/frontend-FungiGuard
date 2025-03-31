@@ -15,7 +15,6 @@ root.render(
           {/* Public routes */}
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-
           {/* Private routes */}
           <Route element={<PrivateRoute />}>
             <Route path="/home" element={<Home />} />
