@@ -178,6 +178,19 @@ function Prediction({ onPredictionSubmit }) {
       );
       return;
     }
+    if (
+      Number(formData.capDiameter) < 0 ||
+      Number(formData.stemHeight) < 0 ||
+      Number(formData.stemWidth) < 0
+    ) {
+      setError(
+        <>
+          <CiWarning />
+          &nbsp;Cap Diameter, Stem Height and Stem Width cannot be negative.
+        </>
+      );
+      return;
+    }
     setShowLoader(true);
     console.log('Form submitted successfully:', formData);
     predictEdibility();
@@ -276,6 +289,7 @@ function Prediction({ onPredictionSubmit }) {
                   tooltip="The type of ring on the mushroom stem"
                 />
                 <RenderInput
+                  type="number"
                   id="capDiameter"
                   label="Cap-Diameter"
                   value={formData.capDiameter}
